@@ -110,8 +110,12 @@ venv.bak/
 # ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ CUSTOM ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
 
 
-# Visual Studio Code
+# IDE
 .vscode
-
-# PyCharm
 .idea
+
+# Test data
+test_data
+
+# Design drafts
+design_drafts
