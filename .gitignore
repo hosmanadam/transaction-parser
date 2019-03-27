@@ -114,8 +114,8 @@ venv.bak/
 .vscode
 .idea
 
-# Test data
-test_data
+# Production data
+production_data
 
 # Design drafts
 design_drafts
