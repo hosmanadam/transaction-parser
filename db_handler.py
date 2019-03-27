@@ -1,6 +1,7 @@
 import sqlite3
 from functools import wraps
-from sqlite3 import Error
+from sqlite3 import Error as SQLiteError
+
 from config import DB_FILE
 
 
@@ -9,8 +10,7 @@ def connection_handler(db_file=DB_FILE):
     def inner(fn):
         @wraps(fn)
         def wrapper(*args, **kwargs):
-            if any('sqlite3' in str(type(arg)) for arg in args):
-                print('condition matched')
+            if len(args) >= 2 and 'sqlite3.Connection' in str(type(args[0])) and 'sqlite3.Cursor' in str(type(args[1])):
                 return fn(*args, **kwargs)
             else:
                 try:
@@ -21,7 +21,7 @@ def connection_handler(db_file=DB_FILE):
                     cursor.close()
                     connection.close()
                     return result
-                except Error as err:
+                except SQLiteError as err:
                     print(err)
                 finally:
                     connection.close()
