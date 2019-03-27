@@ -1,0 +1,59 @@
+2019. 11. 11. 11:11:11 at (47.486671, 19.048319)
+900HUF ALDI Groceries                      # processes transaction in varied case
+900huf aldi groceries                      # processes transaction in lower case
+   900huf   aldi      groceries            # ignores extra inline whitespace
+900 ALDI Groceries                         # adds default currency
+900HUF ALDI                                # adds default category
+900HUF ALDI food                           # figures out subcategory from category
+                                           # doesn't create a new entry just because of a double line break
+300 + 600 ALDI Groceries                   # handles explicit math
+300 600 ALDI Groceries                     # handles implicit math
+                                           # turns all previous cases into the exact same transaction
+900HUF ALDI Groceries  // duplicate?       # handles transaction comment
+
+// May have forgot something?              # leaves full-line comments outside transaction
+
+2019. 11. 11. 11:11 at (47.486671, 19.048319)
+900HUF ALDI Groceries                      # handles time accuracy reduced to minutes
+
+2019. 11. 11. at (47.486671, 19.048319)
+900HUF ALDI Groceries                      # handles time accuracy reduced to day
+
+2019. 11. at (47.486671, 19.048319)
+900HUF ALDI Groceries                      # handles time accuracy reduced to month
+
+2019. at (47.486671, 19.048319)
+900HUF ALDI Groceries                      # handles time accuracy reduced to year
+
+2019. 11. 11. 11:11:11
+900HUF ALDI Groceries                      # handles missing coordinates
+
+2019. 11. 11. 12:11:11 at (47.486671, 19.048319)
+4000 aldi of 500 hygiene                   # handles single category exception
+4000 aldi of 500 hygiene 1000 clothes      # handles multiple category exception
+
+2019. 11. 11. 13:11:11 at (47.486671, 19.048319)
+Market                                     # handles chunked transaction on multiple lines
+14000 groc
+2000 booze
+1000 hygiene
+
+2019. 11. 11. 13:11:11 at (47.486671, 19.048319)
+Market 14000 groc 2000 booze 1000 hygiene  # handles chunked transaction on single line
+
+2019. 11. 11. 14:11:11 at (47.486671, 19.048319)
+. spotify                                  # handles default amount
+5eur spotify                               # handles foreign currency
+4,99eur spotify                            # handles foreign currency with comma decimal separator
+4.99eur spotify                            # handles foreign currency with dot decimal separator
+
+2019. 11. 11. 15:11:11 at (47.486671, 19.048319)
+12000 Tom & Friends groceries              # handles unknown partner name
+12000 Marks & Spencer groceries            # handles full partner name
+12000 marks groceries                      # handles shorthand partner name
+12000 Marks & Spencer groc                 # handles shorthand category name
+
+2019. 11. 11. 15:11:11 at (47.486671, 19.048319)
+12000 Tom & Friends                        # asks about missing category with unknown partner name
+. Tom & Friends                            # asks about non-existent default transaction
+blabla hello 234 lll                       # asks about gibberish
