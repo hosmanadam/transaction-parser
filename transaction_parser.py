@@ -4,35 +4,31 @@ import re
 def split_metacomment(rough_work):
     try:
         metacomment_start = rough_work.index('#')
-        metacomment = rough_work[metacomment_start:].strip()
+        metacomment = rough_work[metacomment_start:].lstrip('# ')
         rough_work = rough_work[:metacomment_start].strip()
         return rough_work, metacomment
     except ValueError:
         pass
-    # TODO: strip comment characters
 
 
 def split_transaction_comment(rough_work):
-    # Break off transaction_comment
     try:
         transaction_comment_start = rough_work.index('//')
-        transaction_comment = rough_work[transaction_comment_start:].strip()
+        transaction_comment = rough_work[transaction_comment_start:].lstrip('/ ')
         rough_work = rough_work[:transaction_comment_start].strip()
         return rough_work, transaction_comment
     except ValueError:
         pass
-    # TODO: strip comment characters
 
 
 def split_amount(rough_work):
     i = 0
     while rough_work[i] in '0123456789.,()+-*/ ':
         i += 1
-    amount = eval(rough_work[:i])
+    amount_hundredths = eval(rough_work[:i])*100
     has_space_after_amount = rough_work[i-1] == ' '
     rough_work = rough_work[i:].strip()
-    return rough_work, amount, has_space_after_amount
-    # TODO: convert to hundredths
+    return rough_work, amount_hundredths, has_space_after_amount
 
 
 def split_currency_code(rough_work, has_space_after_amount, all_currency_codes):
@@ -64,25 +60,25 @@ def parse_transaction_body(
     all_currency_codes,
 ):
     """
-    Split and process individual transaction string body (without header)
+    Split individual transaction string body into its component pieces (without header)
 
     :param raw_transaction:
     :param category_shorthands:
     :param all_currency_codes:
     :return:
     """
-    rough_work = raw_transaction
+    rough_work = raw_transaction.strip()
     rough_work = re.sub(' +', ' ', rough_work)
     rough_work, metacomment = split_metacomment(rough_work)
     rough_work, transaction_comment = split_transaction_comment(rough_work)
-    rough_work, amount, has_space_after_amount = split_amount(rough_work)
+    rough_work, amount_hundredths, has_space_after_amount = split_amount(rough_work)
     rough_work, currency_code = split_currency_code(rough_work, has_space_after_amount, all_currency_codes)
     rough_work, category = split_category(rough_work, category_shorthands)
     partner = rough_work
 
     return [
         {
-            'amount': amount,
+            'amount_hundredths': amount_hundredths,
             'currency_code': currency_code,
             'partner': partner,
             'category': category,
