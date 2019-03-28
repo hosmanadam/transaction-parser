@@ -43,6 +43,7 @@ def process_amount(math_expression):
     """
     try:
         math_expression = re.sub(RE_IMPLICIT_ADDITION_SPACE, ' + ', math_expression)
+        math_expression = math_expression.replace(',', '.')
         amount_hundredths = eval(math_expression) * 100
         return amount_hundredths
     except SyntaxError:
