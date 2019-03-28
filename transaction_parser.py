@@ -25,6 +25,14 @@ def process_shorthand(shorthand, short_to_full):
     return short_to_full[shorthand] if shorthand.lower() in short_to_full else False
 
 
+class ValidationError(Exception):
+    pass
+
+
+class GrammarError(Exception):
+    pass
+
+
 def split_metacomment(rough_work):
     try:
         metacomment_start = rough_work.index('#')
@@ -65,6 +73,10 @@ def split_currency_code(rough_work, has_space_after_amount, all_currency_codes):
             if valid_candidate:
                 currency_code = valid_candidate
                 rough_work = rough_work[3:].strip()
+            else:
+                raise ValidationError(f"'{candidate}' is not a valid currency code")
+        else:
+            raise GrammarError("Only 3-letter currency code may follow amount without space separator")
     return rough_work, currency_code
 
 
@@ -103,6 +115,7 @@ def split_partner(rough_work, shorthands_to_partners):
     valid_candidate = process_shorthand(candidate, shorthands_to_partners)
     if valid_candidate:
         return '', valid_candidate
+    raise ValidationError(f"'{candidate}' is not a valid partner")
 
 
 def parse_transaction_body(
