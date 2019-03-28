@@ -151,22 +151,25 @@ def parse_transaction_body(
     :param all_currency_codes:
     :return:
     """
-    rough_work = raw_transaction.strip()
-    rough_work = re.sub(' +', ' ', rough_work)
-    rough_work, metacomment = split_metacomment(rough_work)
-    rough_work, transaction_comment = split_transaction_comment(rough_work)
-    rough_work, amount_hundredths, has_space_after_amount = split_amount(rough_work)
-    rough_work, currency_code = split_currency_code(rough_work, has_space_after_amount, all_currency_codes)
-    rough_work, exceptions, excepted_amount_hundredths = split_exceptions(rough_work, shorthands_to_categories)
-    rough_work, category = split_category(rough_work, shorthands_to_categories)
-    rough_work, partner = split_partner(rough_work, shorthands_to_partners)
-    main_transaction = {
-            'amount_hundredths': amount_hundredths - excepted_amount_hundredths,
-            'currency_code': currency_code,
-            'partner': partner,
-            'category': category,
-            'transaction_comment': transaction_comment,
-            'metacomment': metacomment,
-        }
-    subtransactions = [{**main_transaction, **exception} for exception in exceptions]
-    return [main_transaction, *subtransactions]
+    try:
+        rough_work = raw_transaction.strip()
+        rough_work = re.sub(' +', ' ', rough_work)
+        rough_work, metacomment = split_metacomment(rough_work)
+        rough_work, transaction_comment = split_transaction_comment(rough_work)
+        rough_work, amount_hundredths, has_space_after_amount = split_amount(rough_work)
+        rough_work, currency_code = split_currency_code(rough_work, has_space_after_amount, all_currency_codes)
+        rough_work, exceptions, excepted_amount_hundredths = split_exceptions(rough_work, shorthands_to_categories)
+        rough_work, category = split_category(rough_work, shorthands_to_categories)
+        rough_work, partner = split_partner(rough_work, shorthands_to_partners)
+        main_transaction = {
+                'amount_hundredths': amount_hundredths - excepted_amount_hundredths,
+                'currency_code': currency_code,
+                'partner': partner,
+                'category': category,
+                'transaction_comment': transaction_comment,
+                'metacomment': metacomment,
+            }
+        subtransactions = [{**main_transaction, **exception} for exception in exceptions]
+        return [main_transaction, *subtransactions]
+    except Exception as e:
+        print(f"Can't process '{raw_transaction}':\n{e}")
