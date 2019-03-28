@@ -8,6 +8,7 @@ PARTNERS_TO_SHORTHANDS = {
     'Spotify': [],
     'TESCO': [],
     'TGI Fridays': ['tgi', 'fridays', 'tgifridays'],
+    'Marks & Spencer': ['marks', 'ms'],
 }
 
 CATEGORIES_TO_SHORTHANDS = {
@@ -130,13 +131,37 @@ FIXTURES = [
 
     {
         'inputs': [
-            {'input_string': '4,99eur spotify music',
-             'functionality': 'handles_foreign_currency_with_comma_decimal_separator'},
             {'input_string': '4.99eur spotify music',
              'functionality': 'handles_foreign_currency_with_dot_decimal_separator'},
+            {'input_string': '4,99eur spotify music',
+             'functionality': 'handles_foreign_currency_with_comma_decimal_separator'},
         ],
         'expected': [
             mock_processed_transaction_body(499, 'EUR', 'Spotify', 'Music'),
+        ]
+    },
+
+    {
+        'inputs': [
+            {'input_string': '12000huf aldi eating out',
+             'functionality': 'handles_multiword_category'},
+        ],
+        'expected': [
+            mock_processed_transaction_body(1200000, 'HUF', 'ALDI', 'Eating out'),
+        ]
+    },
+
+    {
+        'inputs': [
+            {'input_string': '12000huf Marks & Spencer groceries',
+             'functionality': 'handles_multiword_partner_name'},
+            {'input_string': '12000huf marks groceries',
+             'functionality': 'handles_shorthand_partner_name'},
+            {'input_string': '12000huf Marks & Spencer groc',
+             'functionality': 'handles_shorthand_category_name'},
+        ],
+        'expected': [
+            mock_processed_transaction_body(1200000, 'HUF', 'Marks & Spencer', 'Groceries'),
         ]
     },
 
