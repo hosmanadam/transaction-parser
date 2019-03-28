@@ -5,7 +5,7 @@ from transaction_parser import parse_transaction_body
 PARTNERS_TO_SHORTHANDS = {
     'ALDI': [],
     'TESCO': [],
-    'Istanbul Kebab': ['ist', 'istanbul', 'kk', 'kalvin kebab'],
+    'Istanbul Kebab': ['ist', 'istanbul'],
     'TGI Fridays': ['tgi', 'fridays', 'tgifridays'],
 }
 
@@ -33,7 +33,6 @@ def swapparoo(full_to_short):
     return short_to_full
 
 
-# TODO: Build these from db, then scrap above
 SHORTHANDS_TO_CATEGORIES = swapparoo(CATEGORIES_TO_SHORTHANDS)
 SHORTHANDS_TO_PARTNERS = swapparoo(PARTNERS_TO_SHORTHANDS)
 
@@ -58,7 +57,7 @@ def mock_processed_transaction_body(
 
 # Just add fixtures, and they will be collected for testing
 # Within one fixture, all inputs should result in the same output
-fixtures = [
+FIXTURES = [
 
     {
         'inputs': [
@@ -147,41 +146,21 @@ fixtures = [
 class TestParseTransactionBody:
 
     @staticmethod
-    def run_it(fixture_index, input_index):
+    def run_it(input, expected):
         parsed_transaction = parse_transaction_body(
-            fixtures[fixture_index]['inputs'][input_index],
+            input,
             SHORTHANDS_TO_CATEGORIES,
             SHORTHANDS_TO_PARTNERS,
             config.ALL_CURRENCY_CODES,
         )
-        assert parsed_transaction == fixtures[fixture_index]['expected']
+        assert parsed_transaction == expected
 
-    # def test_processes_transaction_in_varied_case(self):
-    #     self.run_it(0, 0)
-    #
-    # def test_processes_transaction_in_lower_case(self):
-    #     self.run_it(0, 1)
-    #
-    # def test_ignores_extra_inline_whitespace(self):
-    #     self.run_it(0, 2)
-    #
-    # def test_adds_default_currency(self):
-    #     self.run_it(0, 3)
-    #
-    # def test_adds_default_category(self):
-    #     self.run_it(0, 4)
-    #
-    # def test_figures_out_subcategory_from_category(self):
-    #     self.run_it(0, 5)
-    #
-    # def test_handles_explicit_math(self):
-    #     self.run_it(0, 6)
-    #
-    # def test_handles_implicit_math(self):
-    #     self.run_it(0, 7)
-
-    def test_handles_body_without_exceptions(self):
-        self.run_it(1, 0)
-
-    def test_handles_body_with_exceptions(self):
-        self.run_it(2, 0)
+    for fixture in FIXTURES:
+        for input in fixture['inputs']:
+            exec(
+                f"def test_{input['functionality']}(self):\n"
+                f"    self.run_it(\n"
+                f"        '{input['input_string']}',\n"
+                f"        {fixture['expected']},\n"
+                f"    )\n\n"
+            )
