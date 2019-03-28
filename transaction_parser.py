@@ -142,15 +142,10 @@ def parse_transaction_body(
     all_currency_codes,
 ):
     """
-    Split individual transaction string body into its component pieces (without header)
+    Split individual transaction string body (without header) into its component pieces
 
-    - Takes some user & general datasets for disambiguation (not validation)
-
-    :param raw_transaction:
-    :param shorthands_to_categories:
-    :param shorthands_to_partners:
-    :param all_currency_codes:
-    :return:
+    - Break off pieces from the ends in a step by step process
+    - Each step does validation and formatting where needed
     """
     try:
         rough_work = raw_transaction.strip()
