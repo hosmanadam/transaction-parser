@@ -172,5 +172,5 @@ def parse_transaction_body(
             }
         subtransactions = [{**main_transaction, **exception} for exception in exceptions]
         return [main_transaction, *subtransactions]
-    except Exception as e:
+    except (ValidationError, GrammarError) as e:
         print(f"Can't process '{raw_transaction}':\n{e}")
