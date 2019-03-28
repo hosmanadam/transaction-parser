@@ -54,7 +54,7 @@ def split_exceptions(rough_work, category_shorthands):
         excepted_amount_hundredths = sum(exception['amount_hundredths'] for exception in exceptions)
         return rough_work, exceptions, excepted_amount_hundredths
     except ValueError:
-        return rough_work, None
+        return rough_work, [], 0
 
 
 def split_category(rough_work, category_shorthands):
