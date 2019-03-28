@@ -1,6 +1,15 @@
 import re
 
 CHARSET_AMOUNT = '0123456789.,()+-*/ '
+RE_IMPLICIT_ADDITION_SPACE = r'(?<=[\d)]) +(?=[\d(])'
+
+
+class ValidationError(Exception):
+    pass
+
+
+class GrammarError(Exception):
+    pass
 
 
 def process_currency_code(currency, currencies):
@@ -25,12 +34,19 @@ def process_shorthand(shorthand, short_to_full):
     return short_to_full[shorthand] if shorthand.lower() in short_to_full else False
 
 
-class ValidationError(Exception):
-    pass
+def process_amount(math_expression):
+    """
+    Returns math expression evaluated and multiplied by 100 (for db storage accuracy)
 
-
-class GrammarError(Exception):
-    pass
+    :param math_expression:
+    :return:
+    """
+    try:
+        math_expression = re.sub(RE_IMPLICIT_ADDITION_SPACE, ' + ', math_expression)
+        amount_hundredths = eval(math_expression) * 100
+        return amount_hundredths
+    except SyntaxError:
+        raise GrammarError(f"{math_expression} is not a valid mathematical expression")
 
 
 def split_metacomment(rough_work):
@@ -57,7 +73,7 @@ def split_amount(rough_work):
     i = 0
     while rough_work[i] in CHARSET_AMOUNT:
         i += 1
-    amount_hundredths = eval(rough_work[:i])*100
+    amount_hundredths = process_amount(rough_work[:i])
     has_space_after_amount = rough_work[i-1] == ' '
     rough_work = rough_work[i:].strip()
     return rough_work, amount_hundredths, has_space_after_amount
