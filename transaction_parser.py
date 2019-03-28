@@ -98,9 +98,17 @@ def split_category(rough_work, shorthands_to_categories):
     return rough_work, category
 
 
+def split_partner(rough_work, shorthands_to_partners):
+    candidate = rough_work
+    valid_candidate = process_shorthand(candidate, shorthands_to_partners)
+    if valid_candidate:
+        return '', valid_candidate
+
+
 def parse_transaction_body(
     raw_transaction,
     shorthands_to_categories,
+    shorthands_to_partners,
     all_currency_codes,
 ):
     """
@@ -110,6 +118,7 @@ def parse_transaction_body(
 
     :param raw_transaction:
     :param shorthands_to_categories:
+    :param shorthands_to_partners:
     :param all_currency_codes:
     :return:
     """
@@ -121,7 +130,7 @@ def parse_transaction_body(
     rough_work, currency_code = split_currency_code(rough_work, has_space_after_amount, all_currency_codes)
     rough_work, exceptions, excepted_amount_hundredths = split_exceptions(rough_work, shorthands_to_categories)
     rough_work, category = split_category(rough_work, shorthands_to_categories)
-    rough_work, partner = '', rough_work
+    rough_work, partner = split_partner(rough_work, shorthands_to_partners)
     main_transaction = {
             'amount_hundredths': amount_hundredths - excepted_amount_hundredths,
             'currency_code': currency_code,

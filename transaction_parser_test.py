@@ -72,7 +72,7 @@ fixtures = [
             {
                 'amount_hundredths': 220000,
                 'currency_code': 'HUF',
-                'partner': 'istanbul kebab',
+                'partner': 'Istanbul Kebab',
                 'category': 'Eating out',
                 'transaction_comment': 'transaction comment',
                 'metacomment': 'metacomment'
@@ -88,7 +88,7 @@ fixtures = [
             {
                 'amount_hundredths': 450000,
                 'currency_code': 'HUF',
-                'partner': 'tgi fridays',
+                'partner': 'TGI Fridays',
                 'category': 'Eating out',
                 'transaction_comment': 'used amex, Amy chipped in',
                 'metacomment': None
@@ -96,7 +96,7 @@ fixtures = [
             {
                 'amount_hundredths': 300000,
                 'currency_code': 'HUF',
-                'partner': 'tgi fridays',
+                'partner': 'TGI Fridays',
                 'category': 'Drinking out',
                 'transaction_comment': 'used amex, Amy chipped in',
                 'metacomment': None
@@ -104,7 +104,7 @@ fixtures = [
             {
                 'amount_hundredths': 150000,
                 'currency_code': 'HUF',
-                'partner': 'tgi fridays',
+                'partner': 'TGI Fridays',
                 'category': 'Tip',
                 'transaction_comment': 'used amex, Amy chipped in',
                 'metacomment': None
@@ -122,6 +122,7 @@ class TestParseTransactionBody:
         parsed_transaction = parse_transaction_body(
             fixtures[fixture_index]['inputs'][input_index],
             SHORTHANDS_TO_CATEGORIES,
+            SHORTHANDS_TO_PARTNERS,
             config.ALL_CURRENCY_CODES,
         )
         assert parsed_transaction == fixtures[fixture_index]['expected']
