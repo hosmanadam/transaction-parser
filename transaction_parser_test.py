@@ -38,7 +38,7 @@ SHORTHANDS_TO_CATEGORIES = swapparoo(CATEGORIES_TO_SHORTHANDS)
 SHORTHANDS_TO_PARTNERS = swapparoo(PARTNERS_TO_SHORTHANDS)
 
 
-def mock_single_transaction_body(
+def mock_processed_transaction_body(
     amount_hundredths,
     currency_code,
     partner,
@@ -62,65 +62,82 @@ fixtures = [
 
     {
         'inputs': [
-            '900HUF ALDI Groceries',                      # processes_transaction_in_varied_case
-            '900huf aldi groceries',                      # processes_transaction_in_lower_case
-            '   900huf   aldi      groceries',            # ignores_extra_inline_whitespace
-            '900 ALDI Groceries',                         # adds_default_currency
-            '900HUF ALDI',                                # adds_default_category
-            '900HUF ALDI food',                           # figures_out_subcategory_from_category
-            '300 + 600 ALDI Groceries',                   # handles_explicit_math
-            '300 600 ALDI Groceries',                     # handles_implicit_math
+            {'input_string': '900huf aldi groceries',
+             'functionality': 'processes_transaction_in_lower_case'},
+            {'input_string': '900HUF ALDI Groceries',
+             'functionality': 'processes_transaction_in_mixed_case'},
+            {'input_string': '   900huf   aldi      groceries',
+             'functionality': 'ignores_extra_inline_whitespace'},
+            {'input_string': '300 + 600huf aldi groceries',
+             'functionality': 'handles_explicit_math'},
+            {'input_string': '300 600huf aldi groceries',
+             'functionality': 'handles_implicit_math'},
+            # {'input_string': '900 aldi groceries',
+            #  'functionality': 'gets_default_currency'},
+            # {'input_string': '900huf aldi',
+            #  'functionality': 'gets_default_category'},
+            # {'input_string': '900huf aldi food',
+            #  'functionality': 'figures_out_subcategory_from_category'},
         ],
         'expected': [
-            mock_single_transaction_body(90000, 'HUF', 'ALDI', 'Groceries'),
+            mock_processed_transaction_body(90000, 'HUF', 'ALDI', 'Groceries'),
         ]
     },
 
     {
         'inputs': [
-            '1400+(2*400)huf istanbul kebab eating out  // transaction comment  # metacomment',  # handles_body_without_exceptions
+            {'input_string': '900huf aldi groceries  // duplicate?',
+             'functionality': 'handles_transaction_comment'},
         ],
         'expected': [
-            {
-                'amount_hundredths': 220000,
-                'currency_code': 'HUF',
-                'partner': 'Istanbul Kebab',
-                'category': 'Eating out',
-                'transaction_comment': 'transaction comment',
-                'metacomment': 'metacomment'
-            },
+            mock_processed_transaction_body(90000, 'HUF', 'ALDI', 'Groceries', 'duplicate?'),
         ]
     },
 
     {
         'inputs': [
-            '14000-5000huf tgi fridays eating out of 3*1000 drinking out 1500 tip  // used amex, Amy chipped in',  # handles_body_with_exceptions
+            {'input_string': '4000huf aldi groc of 500 hygiene',
+             'functionality': 'handles_single_category_exception'},
         ],
         'expected': [
-            {
-                'amount_hundredths': 450000,
-                'currency_code': 'HUF',
-                'partner': 'TGI Fridays',
-                'category': 'Eating out',
-                'transaction_comment': 'used amex, Amy chipped in',
-                'metacomment': None
-            },
-            {
-                'amount_hundredths': 300000,
-                'currency_code': 'HUF',
-                'partner': 'TGI Fridays',
-                'category': 'Drinking out',
-                'transaction_comment': 'used amex, Amy chipped in',
-                'metacomment': None
-            },
-            {
-                'amount_hundredths': 150000,
-                'currency_code': 'HUF',
-                'partner': 'TGI Fridays',
-                'category': 'Tip',
-                'transaction_comment': 'used amex, Amy chipped in',
-                'metacomment': None
-            },
+            mock_processed_transaction_body(350000, 'HUF', 'ALDI', 'Groceries'),
+            mock_processed_transaction_body(50000, 'HUF', 'ALDI', 'Hygiene'),
+        ]
+    },
+
+    {
+        'inputs': [
+            {'input_string': '4000huf aldi groc of 500 hygiene 1000 clothes',
+             'functionality': 'handles_multiple_category_exceptions'},
+        ],
+        'expected': [
+            mock_processed_transaction_body(250000, 'HUF', 'ALDI', 'Groceries'),
+            mock_processed_transaction_body(50000, 'HUF', 'ALDI', 'Hygiene'),
+            mock_processed_transaction_body(100000, 'HUF', 'ALDI', 'Clothes'),
+        ]
+    },
+
+    {
+        'inputs': [
+            {'input_string': '1400+(2*400)huf istanbul kebab eating out  // transaction comment  # metacomment',
+             'functionality': 'handles_body_without_exceptions'},
+        ],
+        'expected': [
+            mock_processed_transaction_body(
+                220000, 'HUF', 'Istanbul Kebab', 'Eating out', 'transaction comment', 'metacomment'
+            ),
+        ]
+    },
+
+    {
+        'inputs': [
+            {'input_string': '14000-5000huf tgi fridays eating out of 3*1000 drinking out 1500 tip  // used amex, Amy chipped in',
+             'functionality': 'handles_body_with_exceptions'},
+        ],
+        'expected': [
+            mock_processed_transaction_body(450000, 'HUF', 'TGI Fridays', 'Eating out', 'used amex, Amy chipped in'),
+            mock_processed_transaction_body(300000, 'HUF', 'TGI Fridays', 'Drinking out', 'used amex, Amy chipped in'),
+            mock_processed_transaction_body(150000, 'HUF', 'TGI Fridays', 'Tip', 'used amex, Amy chipped in'),
         ]
     },
 
