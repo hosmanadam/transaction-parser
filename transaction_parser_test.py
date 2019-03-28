@@ -2,11 +2,43 @@ import config
 from transaction_parser import parse_transaction_body
 
 
-CATEGORY_SHORTHANDS = ['groc', 'groceries', 'hyg', 'hygiene', 'clothes', 'eat', 'eating', 'eating out', 'tip']
-# TODO: Pass shorthands_to_categories (built from database) for validation
-# TODO: ...EXCEPT that would make testing harder so let's do that separately
+PARTNERS_TO_SHORTHANDS = {
+    'ALDI': [],
+    'TESCO': [],
+    'Istanbul Kebab': ['ist', 'istanbul', 'kk', 'kalvin kebab'],
+    'TGI Fridays': ['tgi', 'fridays', 'tgifridays'],
+}
+
+CATEGORIES_TO_SHORTHANDS = {
+    'Clothes': [],
+    'Drinking out': ['drink', 'drinking', 'drinkout', 'drinkingout'],
+    'Eating out': ['eat', 'eatout', 'eating'],
+    'Groceries': ['groc'],
+    'Hygiene': ['hyg'],
+    'Tip': [],
+}
 
 
+def swapparoo(full_to_short):
+    """
+    Return new dict which swaps keys & values of original, flattening all items of list values into individual keys
+
+    - All keys are lowercase
+    """
+    short_to_full = {}
+    for full, short_list in full_to_short.items():
+        short_to_full.update({full.lower(): full})
+        for short in short_list:
+            short_to_full.update({short.lower(): full})
+    return short_to_full
+
+
+# TODO: Build these from db, then scrap above
+SHORTHANDS_TO_CATEGORIES = swapparoo(CATEGORIES_TO_SHORTHANDS)
+SHORTHANDS_TO_PARTNERS = swapparoo(PARTNERS_TO_SHORTHANDS)
+
+
+# Within one fixture, all inputs should result in the same output
 fixtures = [
 
     {
