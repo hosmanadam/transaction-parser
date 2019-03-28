@@ -38,6 +38,25 @@ SHORTHANDS_TO_CATEGORIES = swapparoo(CATEGORIES_TO_SHORTHANDS)
 SHORTHANDS_TO_PARTNERS = swapparoo(PARTNERS_TO_SHORTHANDS)
 
 
+def mock_single_transaction_body(
+    amount_hundredths,
+    currency_code,
+    partner,
+    category,
+    transaction_comment=None,
+    metacomment=None,
+):
+    return {
+        'amount_hundredths': amount_hundredths,
+        'currency_code': currency_code,
+        'partner': partner,
+        'category': category,
+        'transaction_comment': transaction_comment,
+        'metacomment': metacomment,
+    }
+
+
+# Just add fixtures, and they will be collected for testing
 # Within one fixture, all inputs should result in the same output
 fixtures = [
 
@@ -53,14 +72,7 @@ fixtures = [
             '300 600 ALDI Groceries',                     # handles_implicit_math
         ],
         'expected': [
-            {
-                'amount_hundredths': 90000,
-                'currency_code': 'HUF',
-                'partner': 'ALDI',
-                'category': 'Groceries',
-                'transaction_comment': None,
-                'metacomment': None
-            },
+            mock_single_transaction_body(90000, 'HUF', 'ALDI', 'Groceries'),
         ]
     },
 
