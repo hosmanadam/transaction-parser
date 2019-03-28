@@ -31,7 +31,7 @@ def process_shorthand(shorthand, short_to_full):
     :param short_to_full: Dictionary of shorthand keys with corresponding complete values
     :return: Complete form of shorthand from passed dict, or `False` if shorthand not valid
     """
-    return short_to_full[shorthand] if shorthand.lower() in short_to_full else False
+    return short_to_full[shorthand.lower()] if shorthand.lower() in short_to_full else False
 
 
 def process_amount(math_expression):
