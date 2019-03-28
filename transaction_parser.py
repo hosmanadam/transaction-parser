@@ -3,6 +3,13 @@ import re
 CHARSET_AMOUNT = '0123456789.,()+-*/ '
 
 
+def complete_shorthand(shorthand, short_to_full):
+    """Return complete form of shorthand from passed dict, or `False` if shorthand not valid"""
+    if shorthand.lower() in short_to_full:
+        return short_to_full[shorthand]
+    return False
+
+
 def split_metacomment(rough_work):
     try:
         metacomment_start = rough_work.index('#')
@@ -44,12 +51,15 @@ def split_currency_code(rough_work, has_space_after_amount, all_currency_codes):
     return rough_work, currency_code
 
 
-def split_exceptions(rough_work, category_shorthands):
+def split_exceptions(rough_work, shorthands_to_categories):
     try:
         exceptions_start = rough_work.index(' of ')
         exceptions = rough_work[exceptions_start:].replace(' of ', '').strip()
         exceptions = re.findall(r'(?P<amount>[\d\.\,\(\)\+\-\*\/ ]+)(?P<category>[a-zA-z ]+)', exceptions)
-        exceptions = [{'amount_hundredths': eval(match[0])*100, 'category': match[1].strip()} for match in exceptions]
+        exceptions = [{
+            'amount_hundredths': eval(match[0])*100,
+            'category': complete_shorthand(match[1].strip(), shorthands_to_categories)
+        } for match in exceptions]
         rough_work = rough_work[:exceptions_start].strip()
         excepted_amount_hundredths = sum(exception['amount_hundredths'] for exception in exceptions)
         return rough_work, exceptions, excepted_amount_hundredths
@@ -57,28 +67,32 @@ def split_exceptions(rough_work, category_shorthands):
         return rough_work, [], 0
 
 
-def split_category(rough_work, category_shorthands):
+def split_category(rough_work, shorthands_to_categories):
     category = None
     if ' ' in rough_work:
         words = rough_work.split(' ')
         for i in range(len(words)-1, 0, -1):
             candidate = ' '.join(words[i:])
-            if candidate in category_shorthands:
-                category = candidate
+            valid_candidate = complete_shorthand(candidate, shorthands_to_categories)
+            if valid_candidate:
+                category = valid_candidate
                 rough_work = ' '.join(words[:i])
+                break
     return rough_work, category
 
 
 def parse_transaction_body(
     raw_transaction,
-    category_shorthands,
+    shorthands_to_categories,
     all_currency_codes,
 ):
     """
     Split individual transaction string body into its component pieces (without header)
 
+    - Takes some user & general datasets for disambiguation (not validation)
+
     :param raw_transaction:
-    :param category_shorthands:
+    :param shorthands_to_categories:
     :param all_currency_codes:
     :return:
     """
@@ -88,8 +102,8 @@ def parse_transaction_body(
     rough_work, transaction_comment = split_transaction_comment(rough_work)
     rough_work, amount_hundredths, has_space_after_amount = split_amount(rough_work)
     rough_work, currency_code = split_currency_code(rough_work, has_space_after_amount, all_currency_codes)
-    rough_work, exceptions, excepted_amount_hundredths = split_exceptions(rough_work, category_shorthands)
-    rough_work, category = split_category(rough_work, category_shorthands)
+    rough_work, exceptions, excepted_amount_hundredths = split_exceptions(rough_work, shorthands_to_categories)
+    rough_work, category = split_category(rough_work, shorthands_to_categories)
     rough_work, partner = '', rough_work
     main_transaction = {
             'amount_hundredths': amount_hundredths - excepted_amount_hundredths,
