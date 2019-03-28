@@ -1,59 +1,80 @@
-2019. 11. 11. 11:11:11 at (47.486671, 19.048319)
-900HUF ALDI Groceries                      # processes transaction in varied case
-900huf aldi groceries                      # processes transaction in lower case
-   900huf   aldi      groceries            # ignores extra inline whitespace
-900 ALDI Groceries                         # adds default currency
-900HUF ALDI                                # adds default category
-900HUF ALDI food                           # figures out subcategory from category
-                                           # doesn't create a new entry just because of a double line break
-300 + 600 ALDI Groceries                   # handles explicit math
-300 600 ALDI Groceries                     # handles implicit math
-                                           # turns all previous cases into the exact same transaction
-900HUF ALDI Groceries  // duplicate?       # handles transaction comment
+# COLLECTION OF ALL CURRENT AND PLANNED UNIT TEST CASES
 
-// May have forgot something?              # leaves full-line comments outside transaction
 
-2019. 11. 11. 11:11 at (47.486671, 19.048319)
-900HUF ALDI Groceries                      # handles time accuracy reduced to minutes
+# ******************
+# TRANSACTION HEADER
 
-2019. 11. 11. at (47.486671, 19.048319)
-900HUF ALDI Groceries                      # handles time accuracy reduced to day
+2019. 11. 11. 11:11:11 at (47.486671, 19.048319)  # handles_full_time_accuracy
 
-2019. 11. at (47.486671, 19.048319)
-900HUF ALDI Groceries                      # handles time accuracy reduced to month
+2019. 11. 11. 11:11 at (47.486671, 19.048319)     # handles_time_accuracy_reduced_to_minutes
 
-2019. at (47.486671, 19.048319)
-900HUF ALDI Groceries                      # handles time accuracy reduced to year
+2019. 11. 11. at (47.486671, 19.048319)           # handles_time_accuracy_reduced_to_day
 
-2019. 11. 11. 11:11:11
-900HUF ALDI Groceries                      # handles missing coordinates
+2019. 11. at (47.486671, 19.048319)               # handles_time_accuracy_reduced_to_month
 
-2019. 11. 11. 12:11:11 at (47.486671, 19.048319)
-4000 aldi of 500 hygiene                   # handles single category exception
-4000 aldi of 500 hygiene 1000 clothes      # handles multiple category exception
+2019. at (47.486671, 19.048319)                   # handles_time_accuracy_reduced_to_year
+
+2019. 11. 11. 11:11:11                            # handles_missing_coordinates
+
+
+# ***********************
+# SINGLE TRANSACTION BODY
+
+900huf aldi groceries                             # processes_transaction_in_lower_case ✓
+900HUF ALDI Groceries                             # processes_transaction_in_mixed_case ✓
+   900huf   aldi      groceries                   # ignores_extra_inline_whitespace ✓
+300 + 600huf aldi groceries                       # handles_explicit_math ✓
+2*(150+300)huf aldi groceries                     # handles_explicit_math_with_brackets ✓
+300 600huf aldi groceries                         # handles_implicit_math ✓
+900 aldi groceries                                # gets_default_currency
+900huf aldi                                       # gets_default_category
+900huf aldi food                                  # figures_out_subcategory_from_category
+
+900huf aldi groceries  // duplicate?              # handles_transaction_comment ✓
+
+4000huf aldi of 500 hygiene                       # handles_single_category_exception ✓
+
+4000huf aldi of 500 hygiene 1000 clothes          # handles_multiple_category_exceptions ✓
+
+5eur spotify                                      # handles_foreign_currency ✓
+
+4.99eur spotify                                   # handles_foreign_currency_with_dot_decimal_separator ✓
+4,99eur spotify                                   # handles_foreign_currency_with_comma_decimal_separator ✓
+
+12000huf aldi eating out                          # handles_multiword_category ✓
+
+12000huf Marks & Spencer groceries                # handles_multiword_partner_name ✓
+12000huf marks groceries                          # handles_shorthand_partner_name ✓
+12000huf Marks & Spencer groc                     # handles_shorthand_category_name ✓
+
+14000-5000huf Tgi fridays eating out of 3*(400+600) drinking out 1500 tip  // used amex, Amy chipped in  # WOW  # integration_1  ✓
+
+. spotify                                         # handles_default_amount
+
+12000huf Tom & Friends groceries                  # handles_unknown_partner_name
+
+12000huf Tom & Friends                            # asks_about_missing_category_with_unknown_partner_name
+. Tom & Friends                                   # asks_about_non-existent_default_transaction
+blabla hello 234 lll                              # asks_about_gibberish
+
+
+# ************************
+# CHUNKED TRANSACTION BODY
 
 2019. 11. 11. 13:11:11 at (47.486671, 19.048319)
-Market                                     # handles chunked transaction on multiple lines
+Market                                            # handles_chunked_transaction_on_multiple_lines
 14000 groc
 2000 booze
 1000 hygiene
 
+
 2019. 11. 11. 13:11:11 at (47.486671, 19.048319)
-Market 14000 groc 2000 booze 1000 hygiene  # handles chunked transaction on single line
+Market 14000 groc 2000 booze 1000 hygiene         # handles_chunked_transaction_on_single_line
 
-2019. 11. 11. 14:11:11 at (47.486671, 19.048319)
-. spotify                                  # handles default amount
-5eur spotify                               # handles foreign currency
-4,99eur spotify                            # handles foreign currency with comma decimal separator
-4.99eur spotify                            # handles foreign currency with dot decimal separator
 
-2019. 11. 11. 15:11:11 at (47.486671, 19.048319)
-12000 Tom & Friends groceries              # handles unknown partner name
-12000 Marks & Spencer groceries            # handles full partner name
-12000 marks groceries                      # handles shorthand partner name
-12000 Marks & Spencer groc                 # handles shorthand category name
+# ******************
+# HEADER-BODY RECOGNITION
 
-2019. 11. 11. 15:11:11 at (47.486671, 19.048319)
-12000 Tom & Friends                        # asks about missing category with unknown partner name
-. Tom & Friends                            # asks about non-existent default transaction
-blabla hello 234 lll                       # asks about gibberish
+                                                  # doesn't_create_a_new_entry_just_because_of_a_double_line_break
+
+// May have forgot something?                     # leaves_full-line_comments_in_file
