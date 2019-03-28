@@ -3,11 +3,26 @@ import re
 CHARSET_AMOUNT = '0123456789.,()+-*/ '
 
 
-def complete_shorthand(shorthand, short_to_full):
-    """Return complete form of shorthand from passed dict, or `False` if shorthand not valid"""
-    if shorthand.lower() in short_to_full:
-        return short_to_full[shorthand]
-    return False
+def process_currency_code(currency, currencies):
+    """
+    Validate and uppercase passed currency
+
+    :param currency:
+    :param currencies: List of valid currencies
+    :return: Uppercased form of currency code, of `False` if code not valid
+    """
+    return currency.upper() if currency.upper() in currencies else False
+
+
+def process_shorthand(shorthand, short_to_full):
+    """
+    Validate and complete passed shorthand
+
+    :param shorthand:
+    :param short_to_full: Dictionary of shorthand keys with corresponding complete values
+    :return: Complete form of shorthand from passed dict, or `False` if shorthand not valid
+    """
+    return short_to_full[shorthand] if shorthand.lower() in short_to_full else False
 
 
 def split_metacomment(rough_work):
@@ -45,9 +60,11 @@ def split_currency_code(rough_work, has_space_after_amount, all_currency_codes):
     if not has_space_after_amount:
         candidate = rough_work[:3]
         has_space_after_candidate = rough_work[3] == ' '
-        if candidate.upper() in all_currency_codes and has_space_after_candidate:
-            currency_code = candidate
-            rough_work = rough_work[3:].strip()
+        if has_space_after_candidate:
+            valid_candidate = process_currency_code(candidate, all_currency_codes)
+            if valid_candidate:
+                currency_code = valid_candidate
+                rough_work = rough_work[3:].strip()
     return rough_work, currency_code
 
 
@@ -58,7 +75,7 @@ def split_exceptions(rough_work, shorthands_to_categories):
         exceptions = re.findall(r'(?P<amount>[\d\.\,\(\)\+\-\*\/ ]+)(?P<category>[a-zA-z ]+)', exceptions)
         exceptions = [{
             'amount_hundredths': eval(match[0])*100,
-            'category': complete_shorthand(match[1].strip(), shorthands_to_categories)
+            'category': process_shorthand(match[1].strip(), shorthands_to_categories)
         } for match in exceptions]
         rough_work = rough_work[:exceptions_start].strip()
         excepted_amount_hundredths = sum(exception['amount_hundredths'] for exception in exceptions)
@@ -73,7 +90,7 @@ def split_category(rough_work, shorthands_to_categories):
         words = rough_work.split(' ')
         for i in range(len(words)-1, 0, -1):
             candidate = ' '.join(words[i:])
-            valid_candidate = complete_shorthand(candidate, shorthands_to_categories)
+            valid_candidate = process_shorthand(candidate, shorthands_to_categories)
             if valid_candidate:
                 category = valid_candidate
                 rough_work = ' '.join(words[:i])

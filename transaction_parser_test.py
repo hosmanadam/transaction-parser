@@ -55,15 +55,14 @@ fixtures = [
         'expected': [
             {
                 'amount_hundredths': 90000,
-                'currency_code': 'huf',
-                'partner': 'aldi',
+                'currency_code': 'HUF',
+                'partner': 'ALDI',
                 'category': 'Groceries',
                 'transaction_comment': None,
                 'metacomment': None
             },
         ]
     },
-
 
     {
         'inputs': [
@@ -72,7 +71,7 @@ fixtures = [
         'expected': [
             {
                 'amount_hundredths': 220000,
-                'currency_code': 'huf',
+                'currency_code': 'HUF',
                 'partner': 'istanbul kebab',
                 'category': 'Eating out',
                 'transaction_comment': 'transaction comment',
@@ -88,7 +87,7 @@ fixtures = [
         'expected': [
             {
                 'amount_hundredths': 450000,
-                'currency_code': 'huf',
+                'currency_code': 'HUF',
                 'partner': 'tgi fridays',
                 'category': 'Eating out',
                 'transaction_comment': 'used amex, Amy chipped in',
@@ -96,7 +95,7 @@ fixtures = [
             },
             {
                 'amount_hundredths': 300000,
-                'currency_code': 'huf',
+                'currency_code': 'HUF',
                 'partner': 'tgi fridays',
                 'category': 'Drinking out',
                 'transaction_comment': 'used amex, Amy chipped in',
@@ -104,7 +103,7 @@ fixtures = [
             },
             {
                 'amount_hundredths': 150000,
-                'currency_code': 'huf',
+                'currency_code': 'HUF',
                 'partner': 'tgi fridays',
                 'category': 'Tip',
                 'transaction_comment': 'used amex, Amy chipped in',
