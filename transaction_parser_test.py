@@ -72,6 +72,8 @@ FIXTURES = [
              'functionality': 'ignores_extra_inline_whitespace'},
             {'input_string': '300 + 600huf aldi groceries',
              'functionality': 'handles_explicit_math'},
+            {'input_string': '2*(150+300)huf aldi groceries',
+             'functionality': 'handles_explicit_math_with_brackets'},
             {'input_string': '300 600huf aldi groceries',
              'functionality': 'handles_implicit_math'},
             # {'input_string': '900 aldi groceries',
@@ -167,25 +169,13 @@ FIXTURES = [
 
     {
         'inputs': [
-            {'input_string': '1400+(2*400)huf istanbul kebab eating out  // transaction comment  # metacomment',
-             'functionality': 'handles_body_without_exceptions'},
+            {'input_string': '14000-5000huf Tgi fridays eating out of 3*(400+600) drinking out 1500 tip  // used amex, Amy chipped in  # WOW',
+             'functionality': 'integration_1'},
         ],
         'expected': [
-            mock_processed_transaction_body(
-                220000, 'HUF', 'Istanbul Kebab', 'Eating out', 'transaction comment', 'metacomment'
-            ),
-        ]
-    },
-
-    {
-        'inputs': [
-            {'input_string': '14000-5000huf tgi fridays eating out of 3*1000 drinking out 1500 tip  // used amex, Amy chipped in',
-             'functionality': 'handles_body_with_exceptions'},
-        ],
-        'expected': [
-            mock_processed_transaction_body(450000, 'HUF', 'TGI Fridays', 'Eating out', 'used amex, Amy chipped in'),
-            mock_processed_transaction_body(300000, 'HUF', 'TGI Fridays', 'Drinking out', 'used amex, Amy chipped in'),
-            mock_processed_transaction_body(150000, 'HUF', 'TGI Fridays', 'Tip', 'used amex, Amy chipped in'),
+            mock_processed_transaction_body(450000, 'HUF', 'TGI Fridays', 'Eating out', 'used amex, Amy chipped in', 'WOW'),
+            mock_processed_transaction_body(300000, 'HUF', 'TGI Fridays', 'Drinking out', 'used amex, Amy chipped in', 'WOW'),
+            mock_processed_transaction_body(150000, 'HUF', 'TGI Fridays', 'Tip', 'used amex, Amy chipped in', 'WOW'),
         ]
     },
 
