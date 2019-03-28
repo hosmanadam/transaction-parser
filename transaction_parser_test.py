@@ -4,8 +4,9 @@ from transaction_parser import parse_transaction_body
 
 PARTNERS_TO_SHORTHANDS = {
     'ALDI': [],
-    'TESCO': [],
     'Istanbul Kebab': ['ist', 'istanbul'],
+    'Spotify': [],
+    'TESCO': [],
     'TGI Fridays': ['tgi', 'fridays', 'tgifridays'],
 }
 
@@ -13,6 +14,7 @@ CATEGORIES_TO_SHORTHANDS = {
     'Clothes': [],
     'Drinking out': ['drink', 'drinking', 'drinkout', 'drinkingout'],
     'Eating out': ['eat', 'eatout', 'eating'],
+    'Music': [],
     'Groceries': ['groc'],
     'Hygiene': ['hyg'],
     'Tip': [],
@@ -113,6 +115,28 @@ FIXTURES = [
             mock_processed_transaction_body(250000, 'HUF', 'ALDI', 'Groceries'),
             mock_processed_transaction_body(50000, 'HUF', 'ALDI', 'Hygiene'),
             mock_processed_transaction_body(100000, 'HUF', 'ALDI', 'Clothes'),
+        ]
+    },
+
+    {
+        'inputs': [
+            {'input_string': '5eur spotify music',
+             'functionality': 'handles_foreign_currency'},
+        ],
+        'expected': [
+            mock_processed_transaction_body(500, 'EUR', 'Spotify', 'Music'),
+        ]
+    },
+
+    {
+        'inputs': [
+            {'input_string': '4,99eur spotify music',
+             'functionality': 'handles_foreign_currency_with_comma_decimal_separator'},
+            {'input_string': '4.99eur spotify music',
+             'functionality': 'handles_foreign_currency_with_dot_decimal_separator'},
+        ],
+        'expected': [
+            mock_processed_transaction_body(499, 'EUR', 'Spotify', 'Music'),
         ]
     },
 
