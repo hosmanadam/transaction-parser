@@ -75,6 +75,10 @@ Market 14000 groc 2000 booze 1000 hygiene         # handles_chunked_transaction_
 # ******************
 # HEADER-BODY RECOGNITION
 
-                                                  # doesn't_create_a_new_entry_just_because_of_a_double_line_break
+                                                  # does_not_create_a_new_entry_just_because_of_a_double_line_break
 
-// May have forgot something?                     # leaves_full-line_comments_in_file
+// May have forgot something?                     # leaves_full_line_comments_in_file
+
+---                                               # undoes_previous_entry
+
++++  eating out  // forgot to add this before     # extends_last_transaction_with_optional_elements
