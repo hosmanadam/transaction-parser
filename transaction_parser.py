@@ -1,7 +1,9 @@
 import re
 
 CHARSET_AMOUNT = '0123456789.,()+-*/ '
+RE_MULTIPLE_WHITESPACES = r' +'
 RE_IMPLICIT_ADDITION_SPACE = r'(?<=[\d)]) +(?=[\d(])'
+RE_CATEGORY_EXCEPTION = r'(?P<amount>[\d\.\,\(\)\+\-\*\/\% ]+)(?P<category>[a-zA-z ]+)'
 
 
 class ValidationError(Exception):
@@ -101,7 +103,7 @@ def split_exceptions(rough_work, shorthands_to_categories, total_amount_hundredt
     try:
         exceptions_start = rough_work.index(' of ')
         exceptions = rough_work[exceptions_start:].replace(' of ', '').strip()
-        exceptions = re.findall(r'(?P<amount>[\d\.\,\(\)\+\-\*\/\% ]+)(?P<category>[a-zA-z ]+)', exceptions)
+        exceptions = re.findall(RE_CATEGORY_EXCEPTION, exceptions)
         exceptions = [{
             'amount_hundredths':
                 eval(match[0]) * 100 if '%' not in match[0]
@@ -151,7 +153,7 @@ def parse_transaction_body(
     """
     try:
         rough_work = raw_transaction.strip()
-        rough_work = re.sub(' +', ' ', rough_work)
+        rough_work = re.sub(RE_MULTIPLE_WHITESPACES, ' ', rough_work)
         rough_work, metacomment = split_metacomment(rough_work)
         rough_work, transaction_comment = split_transaction_comment(rough_work)
         rough_work, amount_hundredths, has_space_after_amount = split_amount(rough_work)
