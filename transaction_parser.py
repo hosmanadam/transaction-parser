@@ -99,7 +99,7 @@ def split_currency_code(rough_work, has_space_after_amount, all_currency_codes):
     return rough_work, currency_code
 
 
-def split_exceptions(rough_work, shorthands_to_categories, total_amount_hundredths):
+def split_category_exceptions(rough_work, shorthands_to_categories, total_amount_hundredths):
     try:
         exceptions_start = rough_work.index(' of ')
         exceptions = rough_work[exceptions_start:].replace(' of ', '').strip()
@@ -158,7 +158,7 @@ def parse_transaction_body(
         rough_work, transaction_comment = split_transaction_comment(rough_work)
         rough_work, amount_hundredths, has_space_after_amount = split_amount(rough_work)
         rough_work, currency_code = split_currency_code(rough_work, has_space_after_amount, all_currency_codes)
-        rough_work, exceptions, excepted_amount_hundredths = split_exceptions(rough_work, shorthands_to_categories, amount_hundredths)
+        rough_work, exceptions, excepted_amount_hundredths = split_category_exceptions(rough_work, shorthands_to_categories, amount_hundredths)
         rough_work, category = split_category(rough_work, shorthands_to_categories)
         rough_work, partner = split_partner(rough_work, shorthands_to_partners)
         main_transaction = {
