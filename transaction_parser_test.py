@@ -123,6 +123,29 @@ FIXTURES = [
 
     {
         'inputs': [
+            {'input_string': '10000huf tgi fridays eating out of 20% tip',
+             'functionality': 'handles_category_exception_with_percentage_as_amount'},
+        ],
+        'expected': [
+            mock_processed_transaction_body(800000, 'HUF', 'TGI Fridays', 'Eating out'),
+            mock_processed_transaction_body(200000, 'HUF', 'TGI Fridays', 'Tip'),
+        ]
+    },
+
+    {
+        'inputs': [
+            {'input_string': '10000huf tgi fridays eating out of 3000 drinking out 20% tip',
+             'functionality': 'calculates_percentage_from_total'},
+        ],
+        'expected': [
+            mock_processed_transaction_body(500000, 'HUF', 'TGI Fridays', 'Eating out'),
+            mock_processed_transaction_body(300000, 'HUF', 'TGI Fridays', 'Drinking out'),
+            mock_processed_transaction_body(200000, 'HUF', 'TGI Fridays', 'Tip'),
+        ]
+    },
+
+    {
+        'inputs': [
             {'input_string': '5eur spotify music',
              'functionality': 'handles_foreign_currency'},
         ],

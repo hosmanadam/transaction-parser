@@ -36,6 +36,10 @@
 
 4000huf aldi of 500 hygiene 1000 clothes          # handles_multiple_category_exceptions ✓
 
+10000huf tgi fridays eating out of 20% tip        # handles_category_exception_with_percentage_as_amount ✓
+
+10000huf tgi fridays eating out of 3000 drinking out 20% tip  # calculates_percentage_from_total ✓
+
 5eur spotify                                      # handles_foreign_currency ✓
 
 4.99eur spotify                                   # handles_foreign_currency_with_dot_decimal_separator ✓
