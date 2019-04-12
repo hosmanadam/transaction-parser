@@ -1,5 +1,5 @@
 import config
-from transaction_parser import parse_transaction_body
+from parser.transaction_body_parser import parse_transaction_body
 
 
 PARTNERS_TO_SHORTHANDS = {
