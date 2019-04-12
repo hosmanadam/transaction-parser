@@ -5,10 +5,7 @@ import datetime
 def mock_processed_transaction_header(datetime_values, coordinates=None):
     return {
         'datetime': datetime.datetime(*datetime_values),
-        'coordinates': {
-            'latitude': coordinates[0] if coordinates else None,
-            'longitude': coordinates[1] if coordinates else None,
-        }
+        'coordinates': {'latitude': coordinates[0], 'longitude': coordinates[1]} if coordinates else None,
     }
 
 
