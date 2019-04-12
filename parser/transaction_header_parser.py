@@ -1,6 +1,8 @@
 import re
 from datetime import datetime
 
+from parser.exceptions import *
+
 RE_ANY_WHITESPACE = r' *'
 RE_COORDINATES = re.compile(
     r'at \('
@@ -29,6 +31,9 @@ def extract_datetime_object(raw_header):
 
 
 def parse_transaction_header(raw_header):
-    datetime_object = extract_datetime_object(raw_header)
-    coordinates = extract_coordinates(raw_header)
-    return {'datetime': datetime_object, 'coordinates': coordinates}
+    try:
+        datetime_object = extract_datetime_object(raw_header)
+        coordinates = extract_coordinates(raw_header)
+        return {'datetime': datetime_object, 'coordinates': coordinates}
+    except Exception as e:
+        print(f"Can't process '{raw_header}':\n{e}")
