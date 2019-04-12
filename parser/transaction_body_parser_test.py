@@ -209,13 +209,13 @@ class TestParseTransactionBody:
 
     @staticmethod
     def run_it(input, expected):
-        parsed_transaction = parse_transaction_body(
+        parsed_transaction_body = parse_transaction_body(
             input,
             SHORTHANDS_TO_CATEGORIES,
             SHORTHANDS_TO_PARTNERS,
             config.ALL_CURRENCY_CODES,
         )
-        assert parsed_transaction == expected
+        assert parsed_transaction_body == expected
 
     for fixture in FIXTURES:
         for input in fixture['inputs']:
