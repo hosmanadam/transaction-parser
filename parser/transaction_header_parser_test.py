@@ -5,11 +5,15 @@ import datetime
 def mock_processed_transaction_header(datetime_values, coordinates=None):
     return {
         'datetime': datetime.datetime(*datetime_values),
-        'latitude': coordinates[0] if coordinates else None,
-        'longitude': coordinates[1] if coordinates else None,
+        'coordinates': {
+            'latitude': coordinates[0] if coordinates else None,
+            'longitude': coordinates[1] if coordinates else None,
+        }
     }
 
 
+# Just add fixtures, and they will be collected for testing
+# Within one fixture, all inputs should result in the same output
 FIXTURES = [
 
     {
