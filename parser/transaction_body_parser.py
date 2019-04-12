@@ -1,17 +1,11 @@
 import re
 
+from parser.exceptions import *
+
 CHARSET_AMOUNT = '0123456789.,()+-*/ '
 RE_MULTIPLE_WHITESPACES = re.compile(r' +')
 RE_IMPLICIT_ADDITION_SPACE = re.compile(r'(?<=[\d)]) +(?=[\d(])')
 RE_CATEGORY_EXCEPTION = re.compile(r'(?P<amount>[\d\.\,\(\)\+\-\*\/\% ]+)(?P<category>[a-zA-z ]+)')
-
-
-class ValidationError(Exception):
-    pass
-
-
-class GrammarError(Exception):
-    pass
 
 
 def process_currency_code(currency, currencies):
