@@ -1,9 +1,9 @@
 import re
 
 CHARSET_AMOUNT = '0123456789.,()+-*/ '
-RE_MULTIPLE_WHITESPACES = r' +'
-RE_IMPLICIT_ADDITION_SPACE = r'(?<=[\d)]) +(?=[\d(])'
-RE_CATEGORY_EXCEPTION = r'(?P<amount>[\d\.\,\(\)\+\-\*\/\% ]+)(?P<category>[a-zA-z ]+)'
+RE_MULTIPLE_WHITESPACES = re.compile(r' +')
+RE_IMPLICIT_ADDITION_SPACE = re.compile(r'(?<=[\d)]) +(?=[\d(])')
+RE_CATEGORY_EXCEPTION = re.compile(r'(?P<amount>[\d\.\,\(\)\+\-\*\/\% ]+)(?P<category>[a-zA-z ]+)')
 
 
 class ValidationError(Exception):
