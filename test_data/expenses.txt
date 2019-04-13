@@ -16,6 +16,8 @@
 
 2019. 11. 11. 11:11:11                            # handles_missing_coordinates ✓
 
+2019-11-11 11:11:11 at (47.486671, 19.048319)     # handles_dash_date_separator ✓
+
 
 # ***********************
 # SINGLE TRANSACTION BODY

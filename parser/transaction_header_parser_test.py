@@ -61,6 +61,14 @@ FIXTURES = [
         'expected': mock_processed_transaction_header((2019, 11, 11, 11, 11, 11)),
     },
 
+    {
+        'inputs': [
+            {'input_string': '2019-11-11 11:11:11 at (47.486671, 19.048319)',
+             'functionality': 'handles_dash_date_separator'},
+        ],
+        'expected': mock_processed_transaction_header((2019, 11, 11, 11, 11, 11), (47.486671, 19.048319)),
+    },
+
 ]
 
 

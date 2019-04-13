@@ -5,6 +5,7 @@ from parser.exceptions import *
 
 CHARSET_DATETIME_DELIMITERS = r'.-:'
 RE_ANY_WHITESPACE = r' *'
+RE_DELIMITING_WHITESPACE = re.compile(r'(?<=[\d])(?P<delimiting_whitespace> +)(?=[\d])')
 RE_COORDINATES = re.compile(
     r'at \('
     r'(?P<latitude>\d{1,2}\.\d{,8})'
@@ -29,6 +30,7 @@ def extract_coordinates(raw_header):
 
 def extract_datetime_object(raw_header):
     datetime_values = re.match(RE_DATETIME, raw_header).group()
+    datetime_values = re.sub(RE_DELIMITING_WHITESPACE, '.', datetime_values)
     datetime_values = re.sub(RE_ANY_WHITESPACE, '', datetime_values)
     datetime_values = datetime_values.strip(CHARSET_DATETIME_DELIMITERS)
     datetime_values = re.split(RE_DATETIME_DELIMITERS, datetime_values)
