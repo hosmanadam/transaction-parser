@@ -4,7 +4,7 @@ from datetime import datetime
 from parser.exceptions import *
 
 CHARSET_DATETIME_DELIMITERS = r'.-:'
-RE_ANY_WHITESPACE = r' *'
+RE_ANY_WHITESPACE = re.compile(r' +')
 RE_DELIMITING_WHITESPACE = re.compile(r'(?<=[\d])(?P<delimiting_whitespace> +)(?=[\d])')
 RE_COORDINATES = re.compile(
     r'at \('
