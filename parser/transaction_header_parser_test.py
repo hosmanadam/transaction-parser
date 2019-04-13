@@ -21,6 +21,38 @@ FIXTURES = [
         'expected': mock_processed_transaction_header((2019, 11, 11, 11, 11, 11), (47.486671, 19.048319)),
     },
 
+    {
+        'inputs': [
+            {'input_string': '2019. 11. 11. 11:11 at (47.486671, 19.048319)',
+             'functionality': 'handles_time_accuracy_reduced_to_minutes'},
+        ],
+        'expected': mock_processed_transaction_header((2019, 11, 11, 11, 11), (47.486671, 19.048319)),
+    },
+
+    {
+        'inputs': [
+            {'input_string': '2019. 11. 11. at (47.486671, 19.048319)',
+             'functionality': 'handles_time_accuracy_reduced_to_day'},
+        ],
+        'expected': mock_processed_transaction_header((2019, 11, 11), (47.486671, 19.048319)),
+    },
+
+    {
+        'inputs': [
+            {'input_string': '2019. 11. at (47.486671, 19.048319)',
+             'functionality': 'handles_time_accuracy_reduced_to_month'},
+        ],
+        'expected': mock_processed_transaction_header((2019, 11, 1), (47.486671, 19.048319)),
+    },
+
+    {
+        'inputs': [
+            {'input_string': '2019. at (47.486671, 19.048319)',
+             'functionality': 'handles_time_accuracy_reduced_to_year'},
+        ],
+        'expected': mock_processed_transaction_header((2019, 1, 1), (47.486671, 19.048319)),
+    },
+
 ]
 
 

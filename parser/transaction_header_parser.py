@@ -3,6 +3,7 @@ from datetime import datetime
 
 from parser.exceptions import *
 
+CHARSET_DATETIME_DELIMITERS = r'.-:'
 RE_ANY_WHITESPACE = r' *'
 RE_COORDINATES = re.compile(
     r'at \('
@@ -25,8 +26,11 @@ def extract_coordinates(raw_header):
 def extract_datetime_object(raw_header):
     datetime_values = re.match(RE_DATETIME, raw_header).group()
     datetime_values = re.sub(RE_ANY_WHITESPACE, '', datetime_values)
+    datetime_values = datetime_values.strip(CHARSET_DATETIME_DELIMITERS)
     datetime_values = re.split(RE_DATETIME_DELIMITERS, datetime_values)
     datetime_values = [int(value) for value in datetime_values]
+    while len(datetime_values) < 3:
+        datetime_values.append(1)
     return datetime(*datetime_values)
 
 
