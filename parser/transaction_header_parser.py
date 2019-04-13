@@ -18,9 +18,13 @@ RE_DATETIME_DELIMITERS = re.compile(r'\.|\-|\:')
 
 def extract_coordinates(raw_header):
     match = re.findall(RE_COORDINATES, raw_header)
-    latitude = float(match[0][0])
-    longitude = float(match[0][1])
-    return {'latitude': latitude, 'longitude': longitude}
+    if match:
+        latitude = float(match[0][0])
+        longitude = float(match[0][1])
+        coordinates = {'latitude': latitude, 'longitude': longitude}
+    else:
+        coordinates = None
+    return coordinates
 
 
 def extract_datetime_object(raw_header):

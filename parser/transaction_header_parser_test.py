@@ -53,6 +53,14 @@ FIXTURES = [
         'expected': mock_processed_transaction_header((2019, 1, 1), (47.486671, 19.048319)),
     },
 
+    {
+        'inputs': [
+            {'input_string': '2019. 11. 11. 11:11:11',
+             'functionality': 'handles_missing_coordinates'},
+        ],
+        'expected': mock_processed_transaction_header((2019, 11, 11, 11, 11, 11)),
+    },
+
 ]
 
 
