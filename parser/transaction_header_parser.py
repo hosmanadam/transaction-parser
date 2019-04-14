@@ -13,7 +13,7 @@ RE_COORDINATES = re.compile(
     r'(?P<longitude>\d{1,3}\.\d{,8})'
     r'\)'
 )
-RE_DATETIME = re.compile(r'^[\d]{4}[\d\.\-\: ]*')
+RE_DATETIME = re.compile(r'^[\d]{4}[.-][\d\.\-\: ]*')
 RE_DATETIME_DELIMITERS = re.compile(r'\.|\-|\:')
 
 
