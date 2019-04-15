@@ -1,20 +1,7 @@
-import re
 from datetime import datetime
 
 from parser.exceptions import *
-
-CHARSET_DATETIME_DELIMITERS = r'.-:'
-RE_ANY_WHITESPACE = re.compile(r' +')
-RE_DELIMITING_WHITESPACE = re.compile(r'(?<=[\d])(?P<delimiting_whitespace> +)(?=[\d])')
-RE_COORDINATES = re.compile(
-    r'at \('
-    r'(?P<latitude>\d{1,2}\.\d{,8})'
-    r', '
-    r'(?P<longitude>\d{1,3}\.\d{,8})'
-    r'\)'
-)
-RE_DATETIME = re.compile(r'^[\d]{4}[.-][\d\.\-\: ]*')
-RE_DATETIME_DELIMITERS = re.compile(r'\.|\-|\:')
+from parser.regexes import *
 
 
 def extract_coordinates(raw_header):
