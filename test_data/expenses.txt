@@ -67,21 +67,56 @@ blabla hello 234 lll                              # asks_about_gibberish
 # ************************
 # CHUNKED TRANSACTION BODY
 
-2019. 11. 11. 13:11:11 at (47.486671, 19.048319)
 Market                                            # handles_chunked_transaction_on_multiple_lines
 14000 groc
 2000 booze
 1000 hygiene
 
-
-2019. 11. 11. 13:11:11 at (47.486671, 19.048319)
 Market 14000 groc 2000 booze 1000 hygiene         # handles_chunked_transaction_on_single_line
 
 
-# ******************
-# HEADER-BODY RECOGNITION
+# *****
+# ENTRY
+
+2019. 11. 11. 13:11:11 at (47.486671, 19.048319)  # handles_entry_with_single_transaction
+12000 ALDI groceries of 3000 hygiene
+
+2019. 11. 11. 13:11:11 at (47.486671, 19.048319)  # handles_entry_with_chunked_transaction_on_multiple_lines
+Market
+14000 groc
+2000 booze
+1000 hygiene
+
+2019. 11. 11. 13:11:11 at (47.486671, 19.048319)  # handles_entry_with_chunked_transaction_on_single_line
+Market 14000 groc 2000 booze 1000 hygiene
+
+2019. 11. 11. 13:11:11 at (47.486671, 19.048319)  # handles_entry_with_multiple_transactions
+12000 ALDI groceries of 3000 hygiene
+
+Market
+14000 groc
+2000 booze
+1000 hygiene
+
+
+# ***
+# TXT
 
                                                   # does_not_create_a_new_entry_just_because_of_a_double_line_break
+
+                                                  #
+
+                                                  #
+
+                                                  #
+
+                                                  #
+
+                                                  #
+
+
+# *****
+# EXTRA
 
 // May have forgot something?                     # leaves_full_line_comments_in_file
 
