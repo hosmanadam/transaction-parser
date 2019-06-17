@@ -10,7 +10,8 @@ def process_currency_code(currency, currencies):
     :param currencies: List of valid currencies
     :return: Uppercased form of currency code, of `False` if code not valid
     """
-    return currency.upper() if currency.upper() in currencies else False
+    currency = currency.upper()
+    return currency if currency in currencies else False
 
 
 def process_shorthand(shorthand, short_to_full):
@@ -21,7 +22,8 @@ def process_shorthand(shorthand, short_to_full):
     :param short_to_full: Dictionary of shorthand keys with corresponding complete values
     :return: Complete form of shorthand from passed dict, or `False` if shorthand not valid
     """
-    return short_to_full[shorthand.lower()] if shorthand.lower() in short_to_full else False
+    shorthand = shorthand.lower()
+    return short_to_full[shorthand] if shorthand in short_to_full else False
 
 
 def process_amount(math_expression):
