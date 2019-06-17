@@ -1,43 +1,6 @@
 import config
 from parser.transaction_body_parser import parse_transaction_body
-
-
-PARTNERS_TO_SHORTHANDS = {
-    'ALDI': [],
-    'Istanbul Kebab': ['ist', 'istanbul'],
-    'Spotify': [],
-    'TESCO': [],
-    'TGI Fridays': ['tgi', 'fridays', 'tgifridays'],
-    'Marks & Spencer': ['marks', 'ms'],
-}
-
-CATEGORIES_TO_SHORTHANDS = {
-    'Clothes': [],
-    'Drinking out': ['drink', 'drinking', 'drinkout', 'drinkingout'],
-    'Eating out': ['eat', 'eatout', 'eating'],
-    'Music': [],
-    'Groceries': ['groc'],
-    'Hygiene': ['hyg'],
-    'Tip': [],
-}
-
-
-def swapparoo(full_to_short):
-    """
-    Return new dict which swaps keys & values of original, flattening all items of list values into individual keys
-
-    - All keys are lowercase
-    """
-    short_to_full = {}
-    for full, short_list in full_to_short.items():
-        short_to_full.update({full.lower(): full})
-        for short in short_list:
-            short_to_full.update({short.lower(): full})
-    return short_to_full
-
-
-SHORTHANDS_TO_CATEGORIES = swapparoo(CATEGORIES_TO_SHORTHANDS)
-SHORTHANDS_TO_PARTNERS = swapparoo(PARTNERS_TO_SHORTHANDS)
+from db_mock import SHORTHANDS_TO_PARTNERS, SHORTHANDS_TO_CATEGORIES
 
 
 def mock_processed_transaction_body(
