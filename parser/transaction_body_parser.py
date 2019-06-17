@@ -63,12 +63,9 @@ def split_transaction_comment(rough_work):
 
 
 def split_amount(rough_work):
-    i = 0
-    while rough_work[i] in CHARSET_AMOUNT:
-        i += 1
-    amount_hundredths = process_amount(rough_work[:i])
-    has_space_after_amount = rough_work[i-1] == ' '
-    rough_work = rough_work[i:].strip()
+    amount, rough_work = re.findall(RE_AMOUNT_AND_THE_REST, rough_work)[0]
+    amount_hundredths = process_amount(amount)
+    has_space_after_amount = amount[-1] == ' '
     return rough_work, amount_hundredths, has_space_after_amount
 
 

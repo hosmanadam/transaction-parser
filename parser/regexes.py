@@ -21,7 +21,7 @@ RE_DATETIME_DELIMITERS = r'\.|\-|\:'
 
 # TRANSACTION BODY
 
-CHARSET_AMOUNT = '0123456789.,()+-*/ '
+RE_AMOUNT_AND_THE_REST = r'([\d\.,\(\)+\-\* ]*)(.*)'
 RE_MULTIPLE_WHITESPACES = r' {2,}'
 RE_IMPLICIT_ADDITION_SPACE = r'(?<=[\d)]) +(?=[\d(])'
 RE_CATEGORY_EXCEPTION = r'(?P<amount>[\d\.\,\(\)\+\-\*\/\% ]+)(?P<category>[a-zA-z ]+)'
