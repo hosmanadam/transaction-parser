@@ -40,12 +40,9 @@ RE_LOOKAHEAD_ANY_WHITESPACE_AND_DATETIME_OR_END_OF_STRING = (
     rf'\s*$'
     rf')'
 )
-
 RE_ENTRY = (
     rf'{RE_LOOKBEHIND_LINEBREAK_OR_START_OF_STRING}'
-    rf'(?P<entry>'
-    rf'{RE_DATETIME}'
-    rf'{RE_MULTILINE_WHATEVER_LAZY}'
-    rf')'
+    rf'(?P<header>{RE_DATETIME}.*)[\s]'
+    rf'(?P<body>{RE_MULTILINE_WHATEVER_LAZY})'
     rf'{RE_LOOKAHEAD_ANY_WHITESPACE_AND_DATETIME_OR_END_OF_STRING}'
 )
